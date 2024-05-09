@@ -36,16 +36,9 @@ def gpu():
     return f"\n{gpu_info}\n"
 
 
-@app.route("/raw")
-def raw():
-    # return the response generated along with the specific media
-    # type (mime type)
-    return Response(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
-
-
-@app.route("/start")
+@app.route("/s")
 def start():
-    video_input = request.args.get("video_input")
+    video_input = request.args.get("v")
 
     # Start a thread that will perform motion detection
     t = threading.Thread(target=detect, args=(video_input,))
@@ -53,6 +46,12 @@ def start():
     t.start()
 
     return redirect("/raw")
+
+@app.route("/raw")
+def raw():
+    # return the response generated along with the specific media
+    # type (mime type)
+    return Response(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
 def detect(video_input):
